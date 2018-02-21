@@ -1,0 +1,24 @@
+\documentclass[oneside, english, 10pt, a4paper]{memoir}
+\usepackage{CV_template}
+\usepackage{array, calc}
+\newcolumntype{x}[1]{>{\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{y}[1]{>{\hfill\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\setlength\tabcolsep{0pt} % default value: 6pt
+
+\begin{document}
+    \header
+    \section{Test}
+
+
+    \begin{tabular}{x{16cm}y{4cm}}
+        THIS IS A VERY LONG STRING THIS IS A VERY 
+        LONG STRINGTHIS IS A VERY LONG STRINGTHIS IS A VERY LONG 
+        STRINGTHIS IS A VERY LONG STRINGTHIS IS A VERY LONG STRINGTHIS 
+        IS A VERY LONG STRING & 3 \\
+        4 & 5 \\
+        7 & 2028 \\
+    \end{tabular}    
+    
+    \section{Test}
+    \section{Expérience}
+\end{document}
