@@ -1,5 +1,17 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{CV_template}[2018/02/20]
+% Train of thought: I wanted my resume to be simple. 
+%	3 font sizes (1, *2, *3)
+%	3 fonts styles (normal, bold, bold and colored)
+%	linear (only "one" column, the second one just being the clear timeline)
+%	only two types of entries (one liners and those with a description)
+%	every entry should emphasize first the most general information
+%		and then gradually descend towards details. 
+% 		(e.g. the visual cuing should lead you to read, in order: 
+%		Education->School->Diploma->Year (on the right side))	
+
+% Furthermore, there should be only a couple parameters that are often changed. 
+% For now, I just consider the color and the font.
 
 %Imports
 \RequirePackage{calc} %For length calculation
@@ -7,7 +19,15 @@
 \RequirePackage{array} %Tables
 \RequirePackage{xifthen} %if condition
 \RequirePackage{tikz} %Drawing
+\RequirePackage{xcolor} %Color
 \usetikzlibrary{calc, positioning}
+
+\usepackage{tgheros}
+\usepackage{tgbonum}
+\renewcommand{\familydefault}{\sfdefault}
+%Colours
+\definecolor{color}{RGB}{70, 63, 53} %A nice "taupe" brown
+\definecolor{color}{RGB}{135, 121, 108}
 
 %Declarations
 \newlength{\HorizontalMarginLength}
@@ -34,9 +54,6 @@
 	\setlength{\LeftColumnLength}{\PaperWidthMinusMargin - \xratio\PaperWidthMinusMargin}
 	\setlength{\RightColumnLength}{\xratio\PaperWidthMinusMargin}
 
-	%Colours
-	\definecolor{color}{RGB}{70, 63, 53} %A nice "taupe" brown
-
 %Settings
 \newgeometry{margin={\HorizontalMarginLength, \HorizontalMarginLength}}
 \newcommand{\BulletPoint}{\hspace{.25cm}\textbullet\hspace{.25cm}}
@@ -44,14 +61,16 @@
 \setlength\secindent{0cm}
 
 %Dynamic parametrisation
+
 	%Declarations
-	\newcommand{\FirstName}{First Name}
-	\newcommand{\LastName}{Last Name}
-	\newcommand{\Address}{Fake Street 123, Beruna 1337, Narnia.}
-	\newcommand{\Phone}{111-111-111}
-	\newcommand{\Email}{Some-mail@somedomain.com}
-	\newcommand{\Nationality}{Saucisse}
-	\newcommand{\Extra}{Age 12 (01/01/0000)}
+	\newcommand*\cmdname[1]{\texttt{\string#1}} %Just to give the name of the function when something's missing
+	\newcommand{\FirstName}{\cmdname{\SetFirstName} MISSING}
+	\newcommand{\LastName}{\cmdname{\SetLastName} MISSING}
+	\newcommand{\Address}{\cmdname{\SetAddress} MISSING}
+	\newcommand{\Phone}{\cmdname{\SetPhone} MISSING}
+	\newcommand{\Email}{\cmdname{\SetEmail} MISSING}
+	\newcommand{\Nationality}{\cmdname{\SetNationality} MISSING}
+	\newcommand{\Extra}{\cmdname{\SetExtra} MISSING}
 
 	%Assignement
 	\newcommand{\SetFirstName}[1]{ \renewcommand{\FirstName}{#1} }
@@ -94,7 +113,7 @@
 }
 
 \newcommand{\header}{
-	\layout[white]
+	\layout[white] %the argument is the drawing color
 	\begin{tikzpicture}[remember picture, overlay, 
 						inner sep=0pt, outer sep=0pt]
 		%Name
@@ -121,9 +140,17 @@
 	\vskip\SectionTitleLineSpacing\color{color}\LARGE\textbf%TODO: test flush right
 }
 
+%We first need to define two new column types. Both are fixed length, one is 
+%left aligned, the other is right aligned. 
 \newcolumntype{x}[1]{>{\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 \newcolumntype{y}[1]{>{\hfill\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 \setlength\tabcolsep{0pt} % default value: 6pt
+%Therefore, the two column types side by side spawn could exactly the page width
+
+%A CV entry is a Place, a date, and a description. That is 3 arguments. 
+%However, as I received two diplomas from the same school, I wanted 
+%the possibility to add a second description and date, hence the "if" switch.
+%Everything is aligned and bounded thanks to the table formatting
 \newcommand{\CVentry}[5][]{
 	\ifthenelse{\isempty{#4} \AND \isempty{#5}}{
 		\begin{tabular}{x{\LeftColumnLength}y{\RightColumnLength}}
@@ -140,6 +167,7 @@
 	\vspace{.2cm}
 }
 
+%A one liner is just a title, a few details and possibly a date
 \newcommand{\OneLiner}[3][]{
 	\begin{tabular}[t]{x{\LeftColumnLength}y{\RightColumnLength}}
 		\textbf{#1:} #2 & #3\\
