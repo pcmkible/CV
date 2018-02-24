@@ -22,8 +22,8 @@
 \RequirePackage{xcolor} %Color
 \usetikzlibrary{calc, positioning}
 
-\usepackage{tgheros}
 \usepackage{tgbonum}
+\usepackage{tgheros}
 \renewcommand{\familydefault}{\sfdefault}
 %Colours
 \definecolor{color}{RGB}{70, 63, 53} %A nice "taupe" brown
@@ -42,11 +42,10 @@
 	%Ratios
 	\def\xratio{.2}
 	\def\yratio{.15}
-	\def\nameFontFactor{3}
-	\def\titleFontFactor{2}
-
+	\def\nameFontFactor{2.5}
+	
 	%Lengths
-	\setlength{\HorizontalMarginLength}{.5cm}
+	\setlength{\HorizontalMarginLength}{1cm}
 	\setlength{\VerticalMarginLength}{29.7\HorizontalMarginLength/21} %A4: 21*29.7cm 
 	\setlength{\SectionLineWidth}{.4pt}
 	\setlength{\SectionTitleLineSpacing}{-.75cm}
@@ -59,6 +58,7 @@
 \newcommand{\BulletPoint}{\hspace{.25cm}\textbullet\hspace{.25cm}}
 \setlength\parindent{0cm}
 \setlength\secindent{0cm}
+\pagenumbering{gobble} %remove page
 
 %Dynamic parametrisation
 
@@ -118,9 +118,9 @@
 						inner sep=0pt, outer sep=0pt]
 		%Name
 		\node[scale=\nameFontFactor, anchor=north west] at (TopLeft) (Name) 
-					{\textcolor{color}{\textbf{{\FirstName} {\LastName}}}};
+					{\textcolor{color}{\hspace{-.02cm}\textbf{{\FirstName} {\LastName}}}};
 		%Contact
-		\node[below = of Name.west, anchor=west] (Address) {\Address};
+		\node[below = .9cm of Name.west, anchor=west] (Address) {\Address};
 		\node[below = .35cm of Address.west, anchor=north west] (Line1) {\Email \BulletPoint \Phone};
 		\node[below = .35cm of Line1.west, anchor=north west] (Line2) {\Extra \BulletPoint \Nationality};
 
@@ -133,7 +133,7 @@
 
 %Modification to the "\section" command
 \renewcommand\thesection{} %Removes numbering
-\setsecindent{-.575cm} %Removes indent of the title
+\setsecindent{-.53cm} %Removes indent of the title
 \setsecheadstyle{
 	%Draw a line
 	\makebox[\linewidth]{\color{color}\rule{\PaperWidthMinusMargin}{\SectionLineWidth}}
