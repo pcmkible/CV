@@ -4,6 +4,8 @@
 %Imports
 \RequirePackage{calc} %For length calculation
 \RequirePackage{geometry} %Margins
+\RequirePackage{array} %Tables
+\RequirePackage{xifthen} %if condition
 \RequirePackage{tikz} %Drawing
 \usetikzlibrary{calc, positioning}
 
@@ -12,26 +14,32 @@
 \newlength{\VerticalMarginLength}
 \newlength{\SectionLineWidth}
 \newlength{\SectionTitleLineSpacing}
+\newlength{\PaperWidthMinusMargin}
+\newlength{\LeftColumnLength}
+\newlength{\RightColumnLength}
 
 %Static parametrisation
-	%Lengths
-	\setlength{\HorizontalMarginLength}{.5cm}
-	\setlength{\VerticalMarginLength}{29.7\HorizontalMarginLength/21} %A4: 21*29.7cm 
-	\setlength{\SectionLineWidth}{.4pt}
-	\setlength{\SectionTitleLineSpacing}{-.75cm}
-
 	%Ratios
 	\def\xratio{.2}
 	\def\yratio{.15}
 	\def\nameFontFactor{3}
 	\def\titleFontFactor{2}
 
+	%Lengths
+	\setlength{\HorizontalMarginLength}{.5cm}
+	\setlength{\VerticalMarginLength}{29.7\HorizontalMarginLength/21} %A4: 21*29.7cm 
+	\setlength{\SectionLineWidth}{.4pt}
+	\setlength{\SectionTitleLineSpacing}{-.75cm}
+	\setlength{\PaperWidthMinusMargin}{\paperwidth - 2\HorizontalMarginLength}
+	\setlength{\LeftColumnLength}{\PaperWidthMinusMargin - \xratio\PaperWidthMinusMargin}
+	\setlength{\RightColumnLength}{\xratio\PaperWidthMinusMargin}
+
 	%Colours
 	\definecolor{color}{RGB}{70, 63, 53} %A nice "taupe" brown
-	\definecolor{color}{RGB}{255, 0, 0} %A nice "taupe" brown
 
 %Settings
 \newgeometry{margin={\HorizontalMarginLength, \HorizontalMarginLength}}
+\newcommand{\BulletPoint}{\hspace{.25cm}\textbullet\hspace{.25cm}}
 \setlength\parindent{0cm}
 \setlength\secindent{0cm}
 
@@ -43,7 +51,6 @@
 	\newcommand{\Phone}{111-111-111}
 	\newcommand{\Email}{Some-mail@somedomain.com}
 	\newcommand{\Nationality}{Saucisse}
-	\newcommand{\BulletPoint}{\hspace{.25cm}\textbullet\hspace{.25cm}}
 	\newcommand{\Extra}{Age 12 (01/01/0000)}
 
 	%Assignement
@@ -56,8 +63,8 @@
 	\newcommand{\SetExtra}[1]{ \renewcommand{\Extra}{#1} }
 
 %Draw line references on the page to help during construction
-\newcommand{\layout}{
-	\begin{tikzpicture}[remember picture,overlay, draw=black] %draw in black to customize, white for production
+\newcommand{\layout}[1][]{
+	\begin{tikzpicture}[remember picture,overlay, draw={#1}] %draw in black to customize, white for production
 		%Reference cross
 		\draw (current page.north west) -- (current page.south east);
 		\draw (current page.north east) -- (current page.south west);
@@ -87,7 +94,7 @@
 }
 
 \newcommand{\header}{
-	\layout
+	\layout[white]
 	\begin{tikzpicture}[remember picture, overlay, 
 						inner sep=0pt, outer sep=0pt]
 		%Name
@@ -99,17 +106,42 @@
 		\node[below = .35cm of Line1.west, anchor=north west] (Line2) {\Extra \BulletPoint \Nationality};
 
 		%Picture
-		\node at ($(CrossPoint)!.5!(TopRight)$) (Picture) 
-							{\includegraphics[width=4cm]{pic.jpg}};
+	%	\node at ($(CrossPoint)!.5!(TopRight)$) (Picture) 
+	%						{\includegraphics[width=4cm]{pic.jpg}};
 	\end{tikzpicture}
 	\vspace{3.15cm}
 }
 
 %Modification to the "\section" command
 \renewcommand\thesection{} %Removes numbering
-\setsecindent{-.5cm} %Removes indent of the title
+\setsecindent{-.575cm} %Removes indent of the title
 \setsecheadstyle{
 	%Draw a line
-	\makebox[\linewidth]{\color{color}\rule{\paperwidth-2\HorizontalMarginLength}{\SectionLineWidth}}
+	\makebox[\linewidth]{\color{color}\rule{\PaperWidthMinusMargin}{\SectionLineWidth}}
 	\vskip\SectionTitleLineSpacing\color{color}\LARGE\textbf%TODO: test flush right
+}
+
+\newcolumntype{x}[1]{>{\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{y}[1]{>{\hfill\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\setlength\tabcolsep{0pt} % default value: 6pt
+\newcommand{\CVentry}[5][]{
+	\ifthenelse{\isempty{#4} \AND \isempty{#5}}{
+		\begin{tabular}{x{\LeftColumnLength}y{\RightColumnLength}}
+			\textbf{#1} & \\
+			#2 & #3 \\
+		\end{tabular}\\
+		}{
+		\begin{tabular}[t]{x{\LeftColumnLength}y{\RightColumnLength}}
+			\textbf{#1} & \\
+			{#2} & {#3} \\
+			{#4} & {#5} \\
+		\end{tabular}\\
+	}
+	\vspace{.2cm}
+}
+
+\newcommand{\OneLiner}[3][]{
+	\begin{tabular}[t]{x{\LeftColumnLength}y{\RightColumnLength}}
+		\textbf{#1:} #2 & #3\\
+	\end{tabular}\\
 }
