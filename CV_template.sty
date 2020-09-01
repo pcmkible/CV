@@ -138,6 +138,11 @@
 		\node[below = .35cm of Line1.west, anchor=north west] (Line2) {\Extra \BulletPoint \Nationality};
 
 		%Picture
+		\node[circle, path picture={
+			\node at (path picture bounding box.center){
+				\includegraphics[trim={2.8cm 0 .9cm 0}, width=4cm]{pic}
+			};
+		}]  at ($(CrossPoint)!.5!(TopRight)$) {\hspace{4cm} };
 		%\node at ($(CrossPoint)!.5!(TopRight)$) (Picture) 
 		%					{\includegraphics[width=4cm]{pic.jpg}};
 	\end{tikzpicture}
