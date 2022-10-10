@@ -29,6 +29,7 @@
 
 %Colour
 \definecolor{color}{RGB}{135, 121, 108}
+\definecolor{color}{RGB}{1, 0, 56}
 
 %Declarations
 \newlength{\HorizontalMarginLength}
@@ -139,7 +140,7 @@
 
 		%Picture
 		%\node at ($(CrossPoint)!.5!(TopRight)$) (Picture) 
-		%					{\includegraphics[width=4cm]{pic.jpg}};
+		%					{\includegraphics[width=3.8cm]{pic.jpg}};
 	\end{tikzpicture}
 	\vspace{3.45cm}
 }
@@ -174,6 +175,12 @@
 %A one liner is just a title, a few details and possibly a date
 \newcommand{\OneLiner}[3][]{
 	\begin{tabular}[t]{x{\LeftColumnLength}y{\RightColumnLength}}
+		\textbf{#1:} #2 & #3\\
+	\end{tabular}\\
+}
+
+\newcommand{\OneLinerSpec}[3][]{
+	\begin{tabular}[t]{x{.5\PaperWidthMinusMargin}y{.5\PaperWidthMinusMargin}}
 		\textbf{#1:} #2 & #3\\
 	\end{tabular}\\
 }
