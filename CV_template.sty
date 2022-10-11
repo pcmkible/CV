@@ -82,6 +82,7 @@
 	\newcommand{\Email}{\cmdname{\SetEmail} MISSING}
 	\newcommand{\Nationality}{\cmdname{\SetNationality} MISSING}
 	\newcommand{\Extra}{\cmdname{\SetExtra} MISSING}
+	\newcommand{\Date}{\cmdname{\SetDate} MISSING}
 
 	%Assignement
 	\newcommand{\SetFirstName}[1]{ \renewcommand{\FirstName}{#1} }
@@ -92,7 +93,8 @@
 	\newcommand{\SetEmail}[1]{ \renewcommand{\Email}{#1} }
 	\newcommand{\SetNationality}[1]{ \renewcommand{\Nationality}{#1} }
 	\newcommand{\SetExtra}[1]{ \renewcommand{\Extra}{#1} }
-
+	\newcommand{\SetDate}[1]{ \renewcommand{\Date}{#1} }
+	
 %Draw line references on the page to help during construction
 \newcommand{\layout}[1][]{
 	\begin{tikzpicture}[remember picture,overlay, draw={#1}] %draw in black to customize, white for production
@@ -121,6 +123,10 @@
 
 		%Dates column
 		\draw (BottomRight) rectangle (CrossPoint);
+		
+		%extra
+		%\draw[fill=color] (BottomRight) rectangle ($(CrossPoint) - 
+		%(0, 23.1)$);
 	\end{tikzpicture}
 }
 
@@ -134,15 +140,19 @@
 		\node[below = .95cm of Name.west, anchor=west] (Title) 
 					{\textcolor{color}{\hspace{-.021cm}\LARGE\textbf{\Title}}};
 		%Contact
-		\node[below = .65cm of Title.west, anchor=west] (Address) {\Address};
-		\node[below = .35cm of Address.west, anchor=north west] (Line1) {\Email \BulletPoint \Phone};
-		\node[below = .35cm of Line1.west, anchor=north west] (Line2) {\Extra \BulletPoint \Nationality};
+		%\node[below = .65cm of Title.west, anchor=west] (Address) {\Address};
+		\node[below = .55cm of Title.west, anchor=north west] (Line1) {\Email \BulletPoint \Phone};
+		\node[below = .4cm of Line1.west, anchor=north west] (Line2) {\Extra \BulletPoint \Nationality};
 
 		%Picture
 		%\node at ($(CrossPoint)!.5!(TopRight)$) (Picture) 
 		%					{\includegraphics[width=3.8cm]{pic.jpg}};
+		
+		%Date
+		%\node[anchor=north east] at (TopRight) (Date) 
+		%					{\Date};
 	\end{tikzpicture}
-	\vspace{3.45cm}
+	\vspace{3.cm}
 }
 
 %We first need to define two new column types. Both are fixed length, one is 
