@@ -137,11 +137,11 @@
 					{\textcolor{color}{\hspace{-.021cm}\LARGE\textbf{\Title}}};
 		%Contact
 		\node[below = .55cm of Title.west, anchor=north west] (Line1) {\Email \BulletPoint \Phone};
-		\node[below = .4cm of Line1.west, anchor=north west] (Address) {\Address};
-		\node[below = .4cm of Address.west, anchor=north west] (Line2) {\Nationality \BulletPoint \Extra};
-
+		
+		\node[below = .4cm of Line1.west, anchor=north west] (Line2) {\Nationality \BulletPoint \Extra};
+		%\node[below = .4cm of Line2.west, anchor=north west] (Address) {\Address};
 		%Picture
-		\node at ($(CrossPoint)!.5!(TopRight)$) (Picture) 
+		\node at ($(CrossPoint)!.4!(TopRight)$) (Picture) 
 							{\includegraphics[width=3.8cm]{pic.jpg}};
 		
 	\end{tikzpicture}
