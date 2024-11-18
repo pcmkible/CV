@@ -41,13 +41,13 @@
 
 %Static parametrisation
 	%Ratios
-	\def\xratio{.2}	%time column size, proportionally
+	\def\xratio{.15}	%time column size, proportionally
 	\def\yratio{.1} %header size, proportionally
 	\def\nameFontFactor{2.5}
 	
 	%Lengths
 	\setlength{\HorizontalMarginLength}{1cm}
-	\setlength{\VerticalMarginLength}{29.7\HorizontalMarginLength/21} %A4: 21*29.7cm 
+	\setlength{\VerticalMarginLength}{29.7\HorizontalMarginLength/21} %A4: 21*29.7cm so this does 29.7 * hor margin / 21: it's proportional 
 	\setlength{\SectionLineWidth}{.4pt}
 	\setlength{\SectionTitleLineSpacing}{-.75cm}
 	\setlength{\PaperWidthMinusMargin}{\paperwidth - 2\HorizontalMarginLength}
@@ -71,30 +71,27 @@
 }
 
 %Dynamic parametrisation
-
 	%Declarations
 	\newcommand*\cmdname[1]{\texttt{\string#1}} %Just to give the name of the function when something's missing
 	\newcommand{\FirstName}{\cmdname{\SetFirstName} MISSING}
 	\newcommand{\LastName}{\cmdname{\SetLastName} MISSING}
 	\newcommand{\Title}{\cmdname{\SetTitle} MISSING}
-	\newcommand{\Address}{\cmdname{\SetAddress} MISSING}
 	\newcommand{\Phone}{\cmdname{\SetPhone} MISSING}
 	\newcommand{\Email}{\cmdname{\SetEmail} MISSING}
 	\newcommand{\Nationality}{\cmdname{\SetNationality} MISSING}
 	\newcommand{\Extra}{\cmdname{\SetExtra} MISSING}
-	\newcommand{\Date}{\cmdname{\SetDate} MISSING}
+	\newcommand{\Address}{\cmdname{\SetAddress} MISSING}
 
 	%Assignement
 	\newcommand{\SetFirstName}[1]{ \renewcommand{\FirstName}{#1} }
 	\newcommand{\SetLastName}[1]{ \renewcommand{\LastName}{#1} }
 	\newcommand{\SetTitle}[1]{ \renewcommand{\Title}{#1} }
-	\newcommand{\SetAddress}[1]{ \renewcommand{\Address}{#1} }
 	\newcommand{\SetPhone}[1]{ \renewcommand{\Phone}{#1} }
 	\newcommand{\SetEmail}[1]{ \renewcommand{\Email}{#1} }
 	\newcommand{\SetNationality}[1]{ \renewcommand{\Nationality}{#1} }
 	\newcommand{\SetExtra}[1]{ \renewcommand{\Extra}{#1} }
-	\newcommand{\SetDate}[1]{ \renewcommand{\Date}{#1} }
-	
+	\newcommand{\SetAddress}[1]{ \renewcommand{\Address}{#1} }
+
 %Draw line references on the page to help during construction
 \newcommand{\layout}[1][]{
 	\begin{tikzpicture}[remember picture,overlay, draw={#1}] %draw in black to customize, white for production
@@ -125,8 +122,7 @@
 		\draw (BottomRight) rectangle (CrossPoint);
 		
 		%extra
-		%\draw[fill=color] (BottomRight) rectangle ($(CrossPoint) - 
-		%(0, 23.1)$);
+		%\draw[fill=color] (BottomRight) rectangle ($(CrossPoint) - (0, 23.1)$);
 	\end{tikzpicture}
 }
 
@@ -140,18 +136,14 @@
 		\node[below = .95cm of Name.west, anchor=west] (Title) 
 					{\textcolor{color}{\hspace{-.021cm}\LARGE\textbf{\Title}}};
 		%Contact
-		%\node[below = .65cm of Title.west, anchor=west] (Address) {\Address};
-		%\node[below = .55cm of Title.west, anchor=north west] (Line1) {\Email};
-		%\node[below = .4cm of Line1.west, anchor=north west] (Line2) {\Phone};
-\node[below = .55cm of Title.west, anchor=north west] (Line1) {\Email \BulletPoint \Phone};
-\node[below = .4cm of Line1.west, anchor=north west] (Line2) {\Nationality \BulletPoint \Extra};
+		\node[below = .55cm of Title.west, anchor=north west] (Line1) {\Email \BulletPoint \Phone};
+		
+		\node[below = .4cm of Line1.west, anchor=north west] (Line2) {\Nationality \BulletPoint \Extra};
+		%\node[below = .4cm of Line2.west, anchor=north west] (Address) {\Address};
 		%Picture
-		\node at ($(CrossPoint)!.5!(TopRight)$) (Picture) 
+		\node at ($(CrossPoint)!.4!(TopRight)$) (Picture) 
 							{\includegraphics[width=3.8cm]{pic.jpg}};
 		
-		%Date
-		%\node[anchor=north east] at (TopRight) (Date) 
-		%					{\Date};
 	\end{tikzpicture}
 	\vspace{3.cm}
 }
@@ -176,24 +168,26 @@
 		}{
 		\begin{tabular}[t]{x{\LeftColumnLength}y{\RightColumnLength}}
 			\textbf{#1} & \\
-			{#2} & {#3} \\
-			{#4} & {#5} \\
+			\parbox[t]{\LeftColumnLength}{#2} & {#3} \\ %allow for line break on the left column
+			\parbox[t]{\LeftColumnLength}{#4} & {#5} \\ %allow for line break on the left column
 		\end{tabular}\\
 	}
 	\vspace{.2cm}
 }
 
 %A one liner is just a title, a few details and possibly a date
-\newcommand{\OneLiner}[3][]{
-	\begin{tabular}[t]{x{\LeftColumnLength}y{\RightColumnLength}}
-		\textbf{#1:} #2 & #3\\
-	\end{tabular}\\
-}
-
-\newcommand{\OneLinerSpec	}[3][]{
-	\begin{tabular}[t]{x{.5\PaperWidthMinusMargin}y{.5\PaperWidthMinusMargin}}
-		\textbf{#1:} #2 & #3\\
-	\end{tabular}\\
+\newcommand{\OneLiner}[4][false]{
+	\ifthenelse{\equal{#1}{true}}{
+        % IF specified, then custon split
+		\begin{tabular}[t]{x{.5\PaperWidthMinusMargin}y{.5\PaperWidthMinusMargin}}
+            \textbf{#2:} #3 & #4 \\
+        \end{tabular}\\
+    }{
+        % Default CV split
+		\begin{tabular}[t]{x{\LeftColumnLength}y{\RightColumnLength}}
+			\textbf{#2:} #3 & #4\\
+		\end{tabular}\\
+    }
 }
 
 \newcommand{\TwoColumns}[2][]{\makebox[\PaperWidthMinusMargin][l]{#1 \hfill #2}}
